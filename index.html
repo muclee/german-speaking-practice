@@ -20,7 +20,7 @@
             justify-content: space-between;
             padding: 10px;
             position: relative;
-            z-index: 2; /* 確保 header 在最上層 */
+            z-index: 1001; /* 確保 header 在最上層 */
         }
         .header span {
             color: white;
@@ -78,23 +78,21 @@
             width: 250px;
             background-color: #f0f0f0;
             padding: 10px;
-            height: calc(100vh - 50px);
+            height: 100%; /* 改為 100%，內部滾動處理高度 */
             overflow-y: auto;
             position: fixed;
             left: 0;
-            top: 0;
+            top: 50px; /* 從 header 底部開始 */
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s, visibility 0.3s;
-            z-index: 1; /* 確保側邊欄在 header 下方，但在內容上方 */
+            transition: transform 0.3s;
+            z-index: 1000; /* 確保側邊欄在內容上方 */
         }
         .sidebar.hidden {
             transform: translateX(-250px);
-            visibility: hidden; /* 隱藏但保留 DOM 結構 */
         }
         .sidebar.visible {
             transform: translateX(0);
-            visibility: visible;
         }
         .sidebar .entry {
             padding: 8px;
@@ -221,14 +219,11 @@
             }
             .sidebar {
                 transform: translateX(-250px);
-                visibility: hidden;
-                position: fixed; /* 確保手機模式下固定定位 */
-                top: 0;
-                left: 0;
+                top: 50px; /* 從 header 底部開始 */
+                height: calc(100% - 50px); /* 適應動態視口 */
             }
             .sidebar.visible {
                 transform: translateX(0);
-                visibility: visible;
             }
             .content-wrapper {
                 padding-left: 0;
@@ -380,7 +375,7 @@
                 entry.classList.remove('active');
             }
             overview.classList.remove('active');
-            entries[index].classList.add('active');
+            if (entries[index]) entries[index].classList.add('active'); // 防止索引越界
 
             autoHideSidebar();
         }
@@ -388,13 +383,9 @@
         function speak(text) {
             if (!text || text === '-') return;
             const utterance = new SpeechSynthesisUtterance(text);
-            if (selectedVoice) {
-                utterance.voice = selectedVoice;
-            } else {
-                const voices = window.speechSynthesis.getVoices();
-                const germanVoice = voices.find(v => v.lang.startsWith('de'));
-                if (germanVoice) utterance.voice = germanVoice;
-            }
+            const voices = window.speechSynthesis.getVoices();
+            const germanVoice = voices.find(v => v.lang.startsWith('de'));
+            if (germanVoice) utterance.voice = germanVoice;
             utterance.rate = rate;
             utterance.pitch = pitch;
             speechSynthesis.speak(utterance);

@@ -15,7 +15,7 @@ const data = [
     { topic: "Einkaufen", word: "Stadtplan", question: "Wo kann ich einen Stadtplan kaufen?", answer: "Sie können einen Stadtplan im Kiosk kaufen." },
     // 3. Familie（家庭）
     { topic: "Familie", word: "Mutter", question: "Wo wohnt Ihre Mutter?", answer: "Meine Mutter wohnt in Taipei." },
-    { topic: "Familie", word: "Kinder", question: "Haben Sie Kinder?", answer: "Nein, ich habe沒有 Kinder." },
+    { topic: "Familie", word: "Kinder", question: "Haben Sie Kinder?", answer: "Nein, ich habe keine Kinder." },
     { topic: "Familie", word: "Restaurant", question: "Gehen Sie mit Ihrer Familie ins Restaurant?", answer: "Ja, wir gehen am Wochenende ins Restaurant." },
     { topic: "Familie", word: "Tochter", question: "Haben Sie eine Tochter?", answer: "Nein, ich habe keine Tochter." },
     { topic: "Familie", word: "Großvater", question: "Wie alt ist Ihr Großvater?", answer: "Mein Großvater ist achtundachtzig Jahre alt." },
@@ -26,10 +26,10 @@ const data = [
     { topic: "Freunde", word: "Restaurant", question: "Treffen Sie Freunde im Restaurant?", answer: "Ja, ich treffe Freunde im Restaurant." },
     { topic: "Freunde", word: "Wochenende", question: "Treffen Sie Freunde am Wochenende?", answer: "Ja, am Wochenende treffe ich Freunde." },
     { topic: "Freunde", word: "Ausflug", question: "Machen Sie oft einen Ausflug mit Freunden?", answer: "Ja, wir machen oft Ausflüge." },
-    { topic: "Freunde", word: "Geburtstag", question: "Laden Sie Ihre Freunde zu Ihrem Geburtstag ein?", answer: "Ja, ich lade meine Freunde zu meinem Geburtstag ein." },
+    { topic: "Freunde", word: "Geburtstag", question: "Laden Sie Freunde zum Geburtstag ein?", answer: "Ja, ich lade Freunde zum Geburtstag ein." },
     // 5. Beruf（職業）
     { topic: "Beruf", word: "Arbeitsplatz", question: "Wo ist Ihr Arbeitsplatz?", answer: "Mein Arbeitsplatz ist im Büro." },
-    { topic: "Beruf", word: "Kollegen", question: "Haben Sie nette Kollegen?", answer: "Ja, meine Kollegen sind nett." },
+    { topic: "Beruf", word: "Kollegen", question: "Sind Ihre Kollegen nett?", answer: "Ja, meine Kollegen sind sehr nett." },
     { topic: "Beruf", word: "Aufgaben", question: "Was sind Ihre Aufgaben?", answer: "Ich programmiere Software." },
     { topic: "Beruf", word: "Arbeitskleidung", question: "Tragen Sie Arbeitskleidung?", answer: "Nein, ich trage keine Arbeitskleidung." },
     { topic: "Beruf", word: "Spaß", question: "Macht Ihre Arbeit Spaß?", answer: "Ja, meine Arbeit macht Spaß." },
@@ -40,12 +40,28 @@ const data = [
     { topic: "Freizeit", word: "Hobby", question: "Haben Sie ein Hobby?", answer: "Ja, mein Hobby ist Sport. Ich mache Krafttraining." },
     { topic: "Freizeit", word: "Fernseher", question: "Sehen Sie gern fern?", answer: "Ja, ich sehe gern fern." },
     { topic: "Freizeit", word: "Sport", question: "Machen Sie gern Sport?", answer: "Ja, ich mache gern Krafttraining im Fitnessstudio." },
-    { topic: "Freizeit", word: "Feierabend", question: "What do you do after work?", answer: "Ich koche Abendessen mit meiner Frau." },
+    { topic: "Freizeit", word: "Feierabend", question: "Was machen Sie nach Feierabend?", answer: "Ich koche Abendessen mit meiner Frau." },
     // 7. Tagesablauf（日常生活作息）
     { topic: "Tagesablauf", word: "Aufstehen", question: "Wann stehen Sie heute auf?", answer: "Ich stehe heute um sieben Uhr auf." },
     { topic: "Tagesablauf", word: "Frühstück", question: "Was machen Sie nach dem Frühstück?", answer: "Nach dem Frühstück gehe ich zur Arbeit." },
     { topic: "Tagesablauf", word: "Arbeit", question: "Wann gehen Sie zur Arbeit?", answer: "Ich gehe um neun Uhr zur Arbeit." },
     { topic: "Tagesablauf", word: "Freunde", question: "Treffen Sie Freunde nach Feierabend?", answer: "Nein, ich gehe nach Hause." },
     { topic: "Tagesablauf", word: "Fernseher", question: "Sehen Sie oft fern?", answer: "Ja, ich sehe oft fern." },
-    { topic: "Tagesablauf", word: "Kochen", question: "Kochen Sie jeden Tag?", answer: "Ja, ich koche fast jeden Tag." }
+    { topic: "Tagesablauf", word: "Kochen", question: "Kochen Sie jeden Tag?", answer: "Ja, ich koche fast jeden Tag." },
+    // 8. Wohnen（居住）
+    { topic: "Wohnen", word: "Balkon", question: "Haben Sie einen Balkon?", answer: "Ja, ich habe einen Balkon." },
+    { topic: "Wohnen", word: "Möbel", question: "Haben Sie viele Möbel?", answer: "Ja, ich habe viele Möbel." },
+    { topic: "Wohnen", word: "Stock", question: "In welchem Stock wohnen Sie?", answer: "Ich wohne im ersten Stock." },
+    { topic: "Wohnen", word: "Küche", question: "Ist Ihre Küche groß?", answer: "Nein, meine Küche ist klein, aber praktisch." },
+    { topic: "Wohnen", word: "Miete", question: "Ist die Miete hier sehr teuer?", answer: "Es geht. Die Miete hier ist nicht sehr teuer, aber auch nicht billig." },
+    { topic: "Wohnen", word: "Straße", question: "In welcher Straße wohnen Sie?", answer: "Ich wohne in der Bahnhofstraße." },
+    { topic: "Wohnen", word: "Adresse", question: "Könnten Sie mir bitte Ihre Adresse sagen?", answer: "Ja, meine Adresse ist Bahnhofstraße 23, in Berlin." },
+    { topic: "Wohnen", word: "Zimmer", question: "Wie viele Zimmer hat Ihre Wohnung?", answer: "Meine Wohnung hat drei Zimmer." },
+    { topic: "Wohnen", word: "Wohnort", question: "Ist Ihr Wohnort schön?", answer: "Ja, mein Wohnort ist sehr schön." },
+    { topic: "Wohnen", word: "Stadt / Dorf", question: "Wohnen Sie in einer Stadt oder in einem Dorf?", answer: "Ich wohne in einer Stadt." },
+    { topic: "Wohnen", word: "Haus / Wohnung", question: "Wohnen Sie in einem Haus oder in einer Wohnung?", answer: "Ich wohne in einer Wohnung." },
+    { topic: "Wohnen", word: "in der Stadt / auf dem Land", question: "Wohnen Sie in der Stadt oder auf dem Land?", answer: "Ich wohne in der Stadt." },
+    { topic: "Wohnen", word: "Schrank", question: "Haben Sie einen Schrank in Ihrem Zimmer?", answer: "Ja, ich habe einen großen Schrank." },
+    { topic: "Wohnen", word: "Schlüssel", question: "Ist das Ihr Schlüssel?", answer: "Nein, ich habe meinen Schlüssel in meiner Tasche." },
+    { topic: "Wohnen", word: "Garten", question: "Haben Sie einen Garten?", answer: "Nein, ich habe keinen Garten. Ich wohne in einer Wohnung." }
 ];

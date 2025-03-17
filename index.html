@@ -302,6 +302,13 @@
             sidebar.classList.toggle('hidden', !sidebarVisible);
         }
 
+        function autoHideSidebar() {
+            // 檢查是否為手機模式（螢幕寬度小於 768px）
+            if (window.innerWidth <= 768 && sidebarVisible) {
+                toggleSidebar();
+            }
+        }
+
         function updateRate(value) {
             rate = parseFloat(value);
             document.getElementById('rate-value').innerText = rate.toFixed(1);
@@ -339,6 +346,8 @@
             }
             overview.classList.remove('active');
             entries[index].classList.add('active');
+
+            autoHideSidebar(); // 在手機上選擇後自動收回側邊欄
         }
 
         function speak(text) {
@@ -401,7 +410,7 @@
             });
 
             const footer = document.getElementById('sidebar-footer');
-            footer.innerText = 'Created by [Your Name]';
+            footer.innerText = 'Created by MuChe Lee';
         }
 
         function showOverview() {
@@ -429,6 +438,8 @@
                 entry.classList.remove('active');
             }
             overview.classList.add('active');
+
+            autoHideSidebar(); // 在手機上選擇後自動收回側邊欄
         }
 
         window.onload = () => {

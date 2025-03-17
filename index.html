@@ -20,7 +20,7 @@
             justify-content: space-between;
             padding: 10px;
             position: relative;
-            z-index: 1001; /* 確保 header 在最上層 */
+            z-index: 1001;
         }
         .header span {
             color: white;
@@ -78,21 +78,26 @@
             width: 250px;
             background-color: #f0f0f0;
             padding: 10px;
-            height: 100%; /* 改為 100%，內部滾動處理高度 */
+            height: 100%;
             overflow-y: auto;
             position: fixed;
             left: 0;
-            top: 50px; /* 從 header 底部開始 */
+            top: 50px;
             display: flex;
             flex-direction: column;
             transition: transform 0.3s;
-            z-index: 1000; /* 確保側邊欄在內容上方 */
+            z-index: 1000;
+            will-change: transform; /* 優化轉換性能 */
+            border: none; /* 確保無邊框 */
+            box-shadow: none; /* 確保無陰影 */
         }
         .sidebar.hidden {
             transform: translateX(-250px);
+            left: -250px; /* 強制完全移出 */
         }
         .sidebar.visible {
             transform: translateX(0);
+            left: 0;
         }
         .sidebar .entry {
             padding: 8px;
@@ -219,8 +224,8 @@
             }
             .sidebar {
                 transform: translateX(-250px);
-                top: 50px; /* 從 header 底部開始 */
-                height: calc(100% - 50px); /* 適應動態視口 */
+                top: 50px;
+                height: calc(100% - 50px);
             }
             .sidebar.visible {
                 transform: translateX(0);
@@ -327,6 +332,10 @@
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('visible', sidebarVisible);
             sidebar.classList.toggle('hidden', !sidebarVisible);
+            // 微小延遲確保動畫完成
+            setTimeout(() => {
+                sidebar.style.transition = sidebarVisible ? 'transform 0.3s' : 'transform 0.3s';
+            }, 0);
         }
 
         function isMobile() {
@@ -375,7 +384,7 @@
                 entry.classList.remove('active');
             }
             overview.classList.remove('active');
-            if (entries[index]) entries[index].classList.add('active'); // 防止索引越界
+            if (entries[index]) entries[index].classList.add('active');
 
             autoHideSidebar();
         }

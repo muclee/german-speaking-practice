@@ -87,13 +87,13 @@
             flex-direction: column;
             transition: transform 0.3s;
             z-index: 1000;
-            will-change: transform; /* 優化轉換性能 */
-            border: none; /* 確保無邊框 */
-            box-shadow: none; /* 確保無陰影 */
+            will-change: transform;
+            border: none;
+            box-shadow: none;
         }
         .sidebar.hidden {
             transform: translateX(-250px);
-            left: -250px; /* 強制完全移出 */
+            left: -250px;
         }
         .sidebar.visible {
             transform: translateX(0);
@@ -332,7 +332,6 @@
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('visible', sidebarVisible);
             sidebar.classList.toggle('hidden', !sidebarVisible);
-            // 微小延遲確保動畫完成
             setTimeout(() => {
                 sidebar.style.transition = sidebarVisible ? 'transform 0.3s' : 'transform 0.3s';
             }, 0);
@@ -392,9 +391,19 @@
         function speak(text) {
             if (!text || text === '-') return;
             const utterance = new SpeechSynthesisUtterance(text);
-            const voices = window.speechSynthesis.getVoices();
-            const germanVoice = voices.find(v => v.lang.startsWith('de'));
-            if (germanVoice) utterance.voice = germanVoice;
+            // 優先使用用戶選擇的語音
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+                console.log('Using selected voice:', selectedVoice.name); // 調試日誌
+            } else {
+                // 如果未選擇，則回退到默認德語語音
+                const voices = window.speechSynthesis.getVoices();
+                const germanVoice = voices.find(v => v.lang.startsWith('de'));
+                if (germanVoice) {
+                    utterance.voice = germanVoice;
+                    console.log('Using default German voice:', germanVoice.name); // 調試日誌
+                }
+            }
             utterance.rate = rate;
             utterance.pitch = pitch;
             speechSynthesis.speak(utterance);
@@ -403,6 +412,7 @@
         function updateVoice(voiceName) {
             const voices = window.speechSynthesis.getVoices();
             selectedVoice = voices.find(v => v.name === voiceName) || null;
+            console.log('Voice updated to:', selectedVoice ? selectedVoice.name : 'null'); // 調試日誌
         }
 
         function populateVoiceList() {
@@ -415,6 +425,7 @@
                 option.text = `${voice.name} (${voice.lang})`;
                 voiceSelect.appendChild(option);
             });
+            console.log('Voice list populated:', voices.map(v => v.name)); // 調試日誌
         }
 
         function showQA() {
@@ -477,17 +488,18 @@
             autoHideSidebar();
         }
 
+        // 初始化時觸發語音列表填充
         window.onload = () => {
             renderSidebar();
             showOverview();
-            populateVoiceList();
-        };
-
-        speechSynthesis.onvoiceschanged = () => {
-            populateVoiceList();
-            const voices = window.speechSynthesis.getVoices();
-            if (voices.length > 0) {
-                showOverview();
+            // 確保語音列表初始化
+            if (window.speechSynthesis.getVoices().length > 0) {
+                populateVoiceList();
+            } else {
+                speechSynthesis.onvoiceschanged = () => {
+                    populateVoiceList();
+                    showOverview();
+                };
             }
         };
     </script>

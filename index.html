@@ -20,6 +20,7 @@
             justify-content: space-between;
             padding: 10px;
             position: relative;
+            z-index: 2; /* 確保 header 在最上層 */
         }
         .header span {
             color: white;
@@ -45,8 +46,8 @@
             align-items: center;
             width: 100%;
             transition: padding-left 0.3s;
-            min-height: calc(100vh - 50px); /* 確保主內容區高度足夠 */
-            position: relative; /* 為底部 footer 提供定位上下文 */
+            min-height: calc(100vh - 50px);
+            position: relative;
         }
         .theme-container {
             background-color: #e0e0e0;
@@ -84,11 +85,16 @@
             top: 0;
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s;
+            transition: transform 0.3s, visibility 0.3s;
+            z-index: 1; /* 確保側邊欄在 header 下方，但在內容上方 */
         }
         .sidebar.hidden {
             transform: translateX(-250px);
-            display: none; /* 完全隱藏側邊欄 */
+            visibility: hidden; /* 隱藏但保留 DOM 結構 */
+        }
+        .sidebar.visible {
+            transform: translateX(0);
+            visibility: visible;
         }
         .sidebar .entry {
             padding: 8px;
@@ -120,7 +126,7 @@
             font-size: 14px;
             color: #666;
             border-top: 1px solid #ccc;
-            padding-bottom: 50px; /* 增加底部間距，避免被瀏覽器框架遮擋 */
+            padding-bottom: 50px;
         }
         .container {
             padding: 20px;
@@ -215,11 +221,14 @@
             }
             .sidebar {
                 transform: translateX(-250px);
-                display: none; /* 手機模式下預設隱藏 */
+                visibility: hidden;
+                position: fixed; /* 確保手機模式下固定定位 */
+                top: 0;
+                left: 0;
             }
             .sidebar.visible {
                 transform: translateX(0);
-                display: flex; /* 顯示時恢復 flex 佈局 */
+                visibility: visible;
             }
             .content-wrapper {
                 padding-left: 0;
@@ -251,7 +260,7 @@
             .main-footer {
                 position: relative;
                 bottom: 0;
-                padding-bottom: 20px; /* 手機模式下增加底部間距 */
+                padding-bottom: 20px;
             }
         }
     </style>
@@ -436,7 +445,7 @@
             });
 
             const footer = document.getElementById('sidebar-footer');
-            footer.innerText = '© 2025'; // 修改為版權聲明
+            footer.innerText = '© 2025 muclee';
         }
 
         function showOverview() {

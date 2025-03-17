@@ -147,6 +147,13 @@
             overflow-y: auto;
             height: calc(100vh - 50px);
         }
+        .overview-controls {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 577px;
+            margin-left: auto;
+            margin-right: auto;
+        }
         .overview-item {
             margin: 20px 0;
             padding: 15px;
@@ -179,7 +186,7 @@
             margin: 10px 0;
             text-align: center;
         }
-        .next-btn, .show-qa-btn {
+        .next-btn, .show-qa-btn, .random-btn {
             padding: 10px 20px;
             font-size: 16px;
             background-color: #4CAF50;
@@ -189,8 +196,12 @@
             margin: 5px;
             border-radius: 5px;
         }
-        .next-btn:hover, .show-qa-btn:hover {
+        .next-btn:hover, .show-qa-btn:hover, .random-btn:hover {
             background-color: #45a049;
+        }
+        .next-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
         }
         .voice-row {
             margin: 10px 0;
@@ -216,6 +227,12 @@
             color: #999;
             margin-top: auto;
         }
+        .help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+        }
 
         /* 響應式設計 */
         @media (max-width: 768px) {
@@ -235,15 +252,15 @@
                 width: 100%;
                 padding: 10px;
             }
-            .theme-container, .word-container, .container {
+            .theme-container, .word-container, .container, .overview-controls {
                 width: 100%;
                 max-width: 577px;
-                margin: 10px 0;
+                margin: 10px auto;
             }
             .word {
                 font-size: 36px;
             }
-            .next-btn, .show-qa-btn {
+            .next-btn, .show-qa-btn, .random-btn {
                 padding: 12px 24px;
                 font-size: 18px;
             }
@@ -276,6 +293,26 @@
         <div class="footer" id="sidebar-footer"></div>
     </div>
     <div class="content-wrapper">
+        <div class="overview-controls">
+            <div class="voice-row">
+                <select id="voice-select" onchange="updateVoice(this.value)"></select>
+            </div>
+            <div class="slider-container">
+                <label>語速 (Rate): <span id="rate-value">0.9</span></label>
+                <input type="range" id="rate-slider" min="0.5" max="2.0" step="0.1" value="0.9" oninput="updateRate(this.value)">
+                <label>音高 (Pitch): <span id="pitch-value">1.1</span></label>
+                <input type="range" id="pitch-slider" min="0.5" max="2.0" step="0.1" value="1.1" oninput="updatePitch(this.value)">
+                <div class="help-text">
+                    語速 (Rate) 控制發音速度。範圍: 0.5 (慢) 到 2.0 (快)，1.0 為正常語速。
+                </div>
+                <div class="help-text">
+                    音高 (Pitch) 控制聲音的高低。範圍: 0.5 (低) 到 2.0 (高)，1.0 為正常音高。
+                </div>
+                <div class="help-text">
+                    預設設定為：語速稍慢 (0.9)，方便清楚聽到每個字的發音；音高稍高 (1.1)，使聲音更加清晰。
+                </div>
+            </div>
+        </div>
         <div class="main-page" id="main-page">
             <div class="theme-container">
                 Thema: <span id="theme">-</span>
@@ -288,28 +325,22 @@
                 </div>
             </div>
             <div class="container">
-                <div class="item">
-                    <span class="label">問句：</span>
-                    <span id="question">-</span>
-                    <button class="speak-btn" onclick="speak(document.getElementById('question').innerText)">🔊</button>
-                </div>
-                <div class="item">
-                    <span class="label">答句：</span>
-                    <span id="answer">-</span>
-                    <button class="speak-btn" onclick="speak(document.getElementById('answer').innerText)">🔊</button>
-                </div>
                 <div class="button-row">
-                    <button class="next-btn" onclick="nextWord()">下一題</button>
                     <button class="show-qa-btn" onclick="showQA()">顯示問答</button>
+                    <button class="next-btn" onclick="nextWord()">下一題</button>
+                    <button class="random-btn" onclick="randomWord()">隨機</button>
                 </div>
-                <div class="voice-row">
-                    <select id="voice-select" onchange="updateVoice(this.value)"></select>
-                </div>
-                <div class="slider-container">
-                    <label>語速 (Rate): <span id="rate-value">0.9</span></label>
-                    <input type="range" id="rate-slider" min="0.5" max="2.0" step="0.1" value="0.9" oninput="updateRate(this.value)">
-                    <label>音高 (Pitch): <span id="pitch-value">1.1</span></label>
-                    <input type="range" id="pitch-slider" min="0.5" max="2.0" step="0.1" value="1.1" oninput="updatePitch(this.value)">
+                <div class="qa-container">
+                    <div class="item">
+                        <span class="label">問句：</span>
+                        <span id="question">-</span>
+                        <button class="speak-btn" onclick="speak(document.getElementById('question').innerText)">🔊</button>
+                    </div>
+                    <div class="item">
+                        <span class="label">答句：</span>
+                        <span id="answer">-</span>
+                        <button class="speak-btn" onclick="speak(document.getElementById('answer').innerText)">🔊</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -357,9 +388,27 @@
             document.getElementById('pitch-value').innerText = pitch.toFixed(1);
         }
 
+        function updateNextButtonState() {
+            const nextBtn = document.querySelector('.next-btn');
+            if (currentIndex === data.length - 1) {
+                nextBtn.disabled = true;
+            } else {
+                nextBtn.disabled = false;
+            }
+        }
+
         function nextWord() {
+            if (currentIndex < data.length - 1) {
+                currentIndex++;
+                showData(currentIndex);
+            }
+            updateNextButtonState();
+        }
+
+        function randomWord() {
             currentIndex = Math.floor(Math.random() * data.length);
             showData(currentIndex);
+            updateNextButtonState();
         }
 
         function showData(index) {
@@ -376,6 +425,7 @@
             }
             document.getElementById('overview-page').style.display = 'none';
             document.getElementById('main-page').style.display = 'block';
+            document.querySelector('.overview-controls').style.display = 'none';
 
             const entries = document.getElementsByClassName('entry');
             const overview = document.getElementsByClassName('overview')[0];
@@ -386,22 +436,21 @@
             if (entries[index]) entries[index].classList.add('active');
 
             autoHideSidebar();
+            updateNextButtonState();
         }
 
         function speak(text) {
             if (!text || text === '-') return;
             const utterance = new SpeechSynthesisUtterance(text);
-            // 優先使用用戶選擇的語音
             if (selectedVoice) {
                 utterance.voice = selectedVoice;
-                console.log('Using selected voice:', selectedVoice.name); // 調試日誌
+                console.log('Using selected voice:', selectedVoice.name);
             } else {
-                // 如果未選擇，則回退到默認德語語音
                 const voices = window.speechSynthesis.getVoices();
                 const germanVoice = voices.find(v => v.lang.startsWith('de'));
                 if (germanVoice) {
                     utterance.voice = germanVoice;
-                    console.log('Using default German voice:', germanVoice.name); // 調試日誌
+                    console.log('Using default German voice:', germanVoice.name);
                 }
             }
             utterance.rate = rate;
@@ -412,7 +461,7 @@
         function updateVoice(voiceName) {
             const voices = window.speechSynthesis.getVoices();
             selectedVoice = voices.find(v => v.name === voiceName) || null;
-            console.log('Voice updated to:', selectedVoice ? selectedVoice.name : 'null'); // 調試日誌
+            console.log('Voice updated to:', selectedVoice ? selectedVoice.name : 'null');
         }
 
         function populateVoiceList() {
@@ -425,7 +474,7 @@
                 option.text = `${voice.name} (${voice.lang})`;
                 voiceSelect.appendChild(option);
             });
-            console.log('Voice list populated:', voices.map(v => v.name)); // 調試日誌
+            console.log('Voice list populated:', voices.map(v => v.name));
         }
 
         function showQA() {
@@ -463,6 +512,7 @@
             isOverview = true;
             document.getElementById('main-page').style.display = 'none';
             document.getElementById('overview-page').style.display = 'block';
+            document.querySelector('.overview-controls').style.display = 'block';
             const overviewContent = document.getElementById('overview-page');
             overviewContent.innerHTML = '';
 
@@ -488,11 +538,9 @@
             autoHideSidebar();
         }
 
-        // 初始化時觸發語音列表填充
         window.onload = () => {
             renderSidebar();
             showOverview();
-            // 確保語音列表初始化
             if (window.speechSynthesis.getVoices().length > 0) {
                 populateVoiceList();
             } else {

@@ -19,15 +19,24 @@
             display: flex;
             justify-content: space-between;
             padding: 10px;
+            position: relative;
         }
         .header span {
             color: white;
             font-weight: bold;
             padding: 5px 15px;
             border-radius: 4px;
+            cursor: pointer;
         }
         .header .active {
             background-color: #999;
+        }
+        .menu-toggle {
+            display: none;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
         }
         .content-wrapper {
             padding-left: 270px;
@@ -35,6 +44,7 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
+            transition: padding-left 0.3s;
         }
         .theme-container {
             background-color: #e0e0e0;
@@ -72,6 +82,10 @@
             top: 0;
             display: flex;
             flex-direction: column;
+            transition: transform 0.3s;
+        }
+        .sidebar.hidden {
+            transform: translateX(-250px);
         }
         .sidebar .entry {
             padding: 8px;
@@ -183,8 +197,14 @@
 
         /* 響應式設計 */
         @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
             .sidebar {
-                display: none;
+                transform: translateX(-250px);
+            }
+            .sidebar.visible {
+                transform: translateX(0);
             }
             .content-wrapper {
                 padding-left: 0;
@@ -217,13 +237,14 @@
     </style>
 </head>
 <body>
+    <div class="header">
+        <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
+        <span class="active" onclick="location.reload()">Start Deutsch 1</span>
+        <span>Sprechen Teil 2</span>
+    </div>
     <div class="sidebar" id="sidebar">
         <div id="sidebar-content"></div>
         <div class="footer" id="sidebar-footer"></div>
-    </div>
-    <div class="header">
-        <span class="active">Start Deutsch 1</span>
-        <span>Sprechen Teil 2</span>
     </div>
     <div class="content-wrapper">
         <div class="main-page" id="main-page">
@@ -272,6 +293,14 @@
         let rate = 0.9;
         let pitch = 1.1;
         let isOverview = true;
+        let sidebarVisible = false;
+
+        function toggleSidebar() {
+            sidebarVisible = !sidebarVisible;
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('visible', sidebarVisible);
+            sidebar.classList.toggle('hidden', !sidebarVisible);
+        }
 
         function updateRate(value) {
             rate = parseFloat(value);
@@ -372,7 +401,7 @@
             });
 
             const footer = document.getElementById('sidebar-footer');
-            footer.innerText = 'Created by MuChe Lee';
+            footer.innerText = 'Created by [Your Name]';
         }
 
         function showOverview() {

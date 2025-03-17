@@ -45,6 +45,8 @@
             align-items: center;
             width: 100%;
             transition: padding-left 0.3s;
+            min-height: calc(100vh - 50px); /* 確保主內容區高度足夠 */
+            position: relative; /* 為底部 footer 提供定位上下文 */
         }
         .theme-container {
             background-color: #e0e0e0;
@@ -86,6 +88,7 @@
         }
         .sidebar.hidden {
             transform: translateX(-250px);
+            display: none; /* 完全隱藏側邊欄 */
         }
         .sidebar .entry {
             padding: 8px;
@@ -117,6 +120,7 @@
             font-size: 14px;
             color: #666;
             border-top: 1px solid #ccc;
+            padding-bottom: 50px; /* 增加底部間距，避免被瀏覽器框架遮擋 */
         }
         .container {
             padding: 20px;
@@ -194,6 +198,15 @@
         .slider-container label {
             margin-right: 10px;
         }
+        .main-footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: auto;
+        }
 
         /* 響應式設計 */
         @media (max-width: 768px) {
@@ -202,9 +215,11 @@
             }
             .sidebar {
                 transform: translateX(-250px);
+                display: none; /* 手機模式下預設隱藏 */
             }
             .sidebar.visible {
                 transform: translateX(0);
+                display: flex; /* 顯示時恢復 flex 佈局 */
             }
             .content-wrapper {
                 padding-left: 0;
@@ -232,6 +247,11 @@
             }
             .overview-container {
                 padding: 10px;
+            }
+            .main-footer {
+                position: relative;
+                bottom: 0;
+                padding-bottom: 20px; /* 手機模式下增加底部間距 */
             }
         }
     </style>
@@ -285,6 +305,9 @@
             </div>
         </div>
         <div class="overview-container" id="overview-page"></div>
+        <div class="main-footer">
+            Created by MuChe Lee
+        </div>
     </div>
     <script src="data.js"></script>
     <script>
@@ -350,7 +373,7 @@
             overview.classList.remove('active');
             entries[index].classList.add('active');
 
-            autoHideSidebar(); // 在手機上選擇後自動收回側邊欄
+            autoHideSidebar();
         }
 
         function speak(text) {
@@ -413,7 +436,7 @@
             });
 
             const footer = document.getElementById('sidebar-footer');
-            footer.innerText = 'Created by MuChe Lee';
+            footer.innerText = '© 2025'; // 修改為版權聲明
         }
 
         function showOverview() {
@@ -442,7 +465,7 @@
             }
             overview.classList.add('active');
 
-            autoHideSidebar(); // 在手機上選擇後自動收回側邊欄
+            autoHideSidebar();
         }
 
         window.onload = () => {

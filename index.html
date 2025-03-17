@@ -302,9 +302,12 @@
             sidebar.classList.toggle('hidden', !sidebarVisible);
         }
 
+        function isMobile() {
+            return window.matchMedia('(max-width: 768px)').matches;
+        }
+
         function autoHideSidebar() {
-            // 檢查是否為手機模式（螢幕寬度小於 768px）
-            if (window.innerWidth <= 768 && sidebarVisible) {
+            if (isMobile() && sidebarVisible) {
                 toggleSidebar();
             }
         }
